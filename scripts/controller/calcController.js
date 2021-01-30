@@ -33,8 +33,11 @@ class CalcController {
     }
 
     clearAll(){
-        this._operation = []
-        this.setLastOperationToDisplay();
+        this._operation = [];
+        this._lastNumber = '';
+        this._lastOperator = '';
+        
+        this.setLastOperationToDisplay();;
     }
 
     cancelEntry() {
@@ -139,8 +142,6 @@ class CalcController {
         if(isNaN(this.getLastOperation())) {
             if(this.isOperator(value)) {
                 this.setLastOperation(value)
-            } else if(isNaN(value)){
-             
             } else {
                 this.pushOperation(value)
                 this.setLastOperationToDisplay();
@@ -151,7 +152,7 @@ class CalcController {
                 this.pushOperation(value)
             } else {
                 let newValue = this.getLastOperation().toString() + value.toString()
-                this.setLastOperation(parseInt(newValue));
+                this.setLastOperation(parseFloat(newValue));
 
                 this.setLastOperationToDisplay();
             }
@@ -164,6 +165,20 @@ class CalcController {
     //     this.displayCalc = 'Error';
     // }
 
+    addDot(){
+
+        let lastOperation = this.getLastOperation();
+
+        if (this.isOperator(lastOperation) || !lastOperation) {
+            this.pushOperation('0.')
+        } else {
+            this.setLastOperation(lastOperation.toString() + '.');
+        }
+
+        this.setLastOperationToDisplay()
+
+    }
+
     execBtn(value) {
         if(value === 'ac') this.clearAll();
         if(value === 'ce') this.cancelEntry()
@@ -172,7 +187,7 @@ class CalcController {
         if(value === 'divisao') this.addOperation('/');
         if(value === 'multiplicacao') this.addOperation('*');
         if(value === 'porcento') this.addOperation('%');
-        if(value === 'ponto') this.addOperation('.');
+        if(value === 'ponto') this.addDot();
         if(value === 'igual') this.calc();
         if(value === '0') this.addOperation(parseInt(value))
         if(value === '1') this.addOperation(parseInt(value))
